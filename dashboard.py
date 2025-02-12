@@ -47,8 +47,3 @@ ax.set_xlabel("Jam dalam Sehari")
 ax.set_ylabel("Kadar Polusi (Rata-rata)")
 ax.set_title("Variasi Tingkat Polusi Udara Berdasarkan Jam dalam Sehari")
 st.pyplot(fig)
-
-st.header("4. Clustering dengan Binning")
-dingling_df.loc[:, "Polusi_Level"] = pd.cut(dingling_df["PM2.5"], bins=3, labels=["Rendah", "Sedang", "Tinggi"])
-st.write("Kategori polusi berdasarkan binning:")
-st.dataframe(dingling_df[["datetime", "PM2.5", "Polusi_Level"].head()])
