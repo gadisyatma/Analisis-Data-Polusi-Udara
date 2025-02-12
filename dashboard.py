@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import geopandas as gpd
-import folium
-from streamlit_folium import folium_static
 
 st.set_page_config(layout="wide")
 
@@ -62,27 +59,7 @@ ax.set_ylabel("Kadar Polusi (Rata-rata)")
 ax.set_title("Variasi Tingkat Polusi Udara Berdasarkan Jam dalam Sehari")
 st.pyplot(fig)
 
-# RFM Analysis untuk Polusi Udara
-st.subheader("4. Analisis RFM untuk Polusi Udara")
-rfm_data = dingling_df.groupby("datetime")[selected_pollutant].agg(["max", "count", "mean"])
-rfm_data.columns = ["Recency", "Frequency", "Monetary"]
-st.dataframe(rfm_data)
-
-# Geospatial Analysis jika ada data lokasi
-if "latitude" in dingling_df.columns and "longitude" in dingling_df.columns:
-    st.subheader("5. Analisis Geospasial Polusi Udara")
-    m = folium.Map(location=[dingling_df["latitude"].mean(), dingling_df["longitude"].mean()], zoom_start=10)
-    for _, row in dingling_df.iterrows():
-        folium.CircleMarker(
-            location=[row["latitude"], row["longitude"]],
-            radius=5,
-            color="red" if row[selected_pollutant] > dingling_df[selected_pollutant].median() else "green",
-            fill=True,
-            fill_color="red" if row[selected_pollutant] > dingling_df[selected_pollutant].median() else "green"
-        ).add_to(m)
-    folium_static(m)
-
 # Clustering dengan Binning
-st.subheader("6. Clustering dengan Binning")
+st.subheader("4. Clustering dengan Binning")
 dingling_df["Polusi_Level"] = pd.cut(dingling_df[selected_pollutant], bins=3, labels=["Rendah", "Sedang", "Tinggi"])
-st.dataframe(dingling_df[["datetime", selected_pollutant, "Polusi_Level"]].head())
+st.dataframe(dingling_df[["datetime", selected_pollutant, "Polusi_Level"].head()])
