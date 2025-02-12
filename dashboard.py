@@ -59,7 +59,7 @@ ax.grid(True)
 st.pyplot(fig)
 
 # Variasi Polusi Berdasarkan Jam
-st.subheader("3. Variasi Polusi Berdasarkan Jam dalam Sehari")
+t.subheader("3. Variasi Polusi Berdasarkan Jam dalam Sehari")
 hourly_avg = filtered_df.groupby("hour")[pollutants].mean()
 fig, ax = plt.subplots()
 sns.lineplot(data=hourly_avg, ax=ax)
@@ -71,6 +71,6 @@ st.pyplot(fig)
 
 # Clustering dengan Binning
 st.subheader("4. Clustering dengan Binning")
-filtered_df["Polusi_Level"] = pd.cut(filtered_df[selected_pollutant], bins=3, labels=["Rendah", "Sedang", "Tinggi"])
+filtered_df.loc[:, "Polusi_Level"] = pd.cut(filtered_df[selected_pollutant], bins=3, labels=["Rendah", "Sedang", "Tinggi"])
 st.write("Kategori polusi berdasarkan binning:")
-st.dataframe(filtered_df[["datetime", selected_pollutant, "Polusi_Level"].head()])
+st.dataframe(filtered_df[["datetime", selected_pollutant, "Polusi_Level"]].head())
