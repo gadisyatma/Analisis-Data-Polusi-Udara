@@ -19,19 +19,47 @@ def load_data():
 
 dingling_df = load_data()
 
+# Menampilkan Dataframe Awal
+st.subheader("Dataset Awal")
+st.dataframe(dingling_df.head())
+
 # Sidebar untuk filter data
 st.sidebar.header("Filter Data")
 pollutants = ["PM2.5", "PM10", "SO2", "NO2", "CO", "O3"]
 selected_pollutant = st.sidebar.selectbox("Pilih Polutan", pollutants)
 
 # Slider untuk rentang suhu dan tekanan
-min_temp, max_temp = st.sidebar.slider("Pilih Rentang Suhu (TEMP)", int(dingling_df["TEMP"].min()), int(dingling_df["TEMP"].max()), (int(dingling_df["TEMP"].min()), int(dingling_df["TEMP"].max())))
-min_pres, max_pres = st.sidebar.slider("Pilih Rentang Tekanan Udara (PRES)", int(dingling_df["PRES"].min()), int(dingling_df["PRES"].max()), (int(dingling_df["PRES"].min()), int(dingling_df["PRES"].max())))
+min_temp, max_temp = st.sidebar.slider("Pilih Rentang Suhu (TEMP)", 
+                                       int(dingling_df["TEMP"].min()), 
+                                       int(dingling_df["TEMP"].max()), 
+                                       (int(dingling_df["TEMP"].min()), int(dingling_df["TEMP"].max())))
+min_pres, max_pres = st.sidebar.slider("Pilih Rentang Tekanan Udara (PRES)", 
+                                       int(dingling_df["PRES"].min()), 
+                                       int(dingling_df["PRES"].max()), 
+                                       (int(dingling_df["PRES"].min()), int(dingling_df["PRES"].max())))
 
-filtered_df = dingling_df[(dingling_df["TEMP"] >= min_temp) & (dingling_df["TEMP"] <= max_temp) & (dingling_df["PRES"] >= min_pres) & (dingling_df["PRES"] <= max_pres)]
+filtered_df = dingling_df[(dingling_df["TEMP"] >= min_temp) & (dingling_df["TEMP"] <= max_temp) & 
+                           (dingling_df["PRES"] >= min_pres) & (dingling_df["PRES"] <= max_pres)]
 
-# Hubungan Suhu & Tekanan dengan Polusi
+# Menampilkan informasi dataset setelah difilter
+st.subheader("Ringkasan Data Setelah Filter")
+st.write("**Info Data:**")
+st.text(filtered_df.info())
+st.write("**Deskripsi Statistik:**")
+st.dataframe(filtered_df.describe())
+
+# Agregasi Data untuk Eksplorasi
+st.subheader("Agregasi Data")
+st.write("Rata-rata kadar polutan berdasarkan kondisi hujan:")
+st.dataframe(filtered_df.groupby("Rain_Status")[pollutants].mean())
+
+st.write("Rata-rata kadar polutan berdasarkan jam dalam sehari:")
+hourly_avg = filtered_df.groupby("hour")[pollutants].mean()
+st.dataframe(hourly_avg)
+
+# Visualisasi Hubungan Suhu & Tekanan dengan Polusi
 st.subheader("1. Hubungan Suhu & Tekanan dengan Polusi")
+
 fig, ax = plt.subplots()
 sns.scatterplot(x=filtered_df["TEMP"], y=filtered_df[selected_pollutant], alpha=0.5, ax=ax)
 ax.set_xlabel("Suhu Udara (TEMP)")
@@ -60,7 +88,6 @@ st.pyplot(fig)
 
 # Variasi Polusi Berdasarkan Jam
 st.subheader("3. Variasi Polusi Berdasarkan Jam dalam Sehari")
-hourly_avg = filtered_df.groupby("hour")[pollutants].mean()
 fig, ax = plt.subplots()
 sns.lineplot(data=hourly_avg, ax=ax)
 ax.set_xlabel("Jam dalam Sehari")
@@ -73,4 +100,4 @@ st.pyplot(fig)
 st.subheader("4. Clustering dengan Binning")
 filtered_df.loc[:, "Polusi_Level"] = pd.cut(filtered_df[selected_pollutant], bins=3, labels=["Rendah", "Sedang", "Tinggi"])
 st.write("Kategori polusi berdasarkan binning:")
-st.dataframe(filtered_df[["datetime", selected_pollutant, "Polusi_Level"]].head())
+st.dataframe(filtered_df[["datetime", selected_pollutant, "Polusi_Level"].head()])
