@@ -19,13 +19,10 @@ def load_data():
 
 dingling_df = load_data()
 
-# Tampilan Data Awal
-st.subheader("Preview Data")
-st.dataframe(dingling_df.head())
-
-# Pilihan Polutan
+# Sidebar untuk filter data
+st.sidebar.header("Filter Data")
 pollutants = ["PM2.5", "PM10", "SO2", "NO2", "CO", "O3"]
-selected_pollutant = st.selectbox("Pilih Polutan", pollutants)
+selected_pollutant = st.sidebar.selectbox("Pilih Polutan", pollutants)
 
 # Hubungan Suhu & Tekanan dengan Polusi
 st.subheader("1. Hubungan Suhu & Tekanan dengan Polusi")
@@ -61,5 +58,3 @@ ax.set_xlabel("Jam dalam Sehari")
 ax.set_ylabel("Kadar Polusi (Rata-rata)")
 ax.set_title("Variasi Tingkat Polusi Udara Berdasarkan Jam dalam Sehari")
 st.pyplot(fig)
-
-st.success("Analisis data berhasil ditampilkan! 🚀")
