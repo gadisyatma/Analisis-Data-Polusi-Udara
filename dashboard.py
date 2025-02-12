@@ -1,5 +1,3 @@
-pip install seaborn
-
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -8,7 +6,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(layout="wide")
 
 # Judul Dashboard
-st.title("📊 Dashboard Analisis Polusi Udara")
+st.title("Dashboard Analisis Polusi Udara")
 
 # Membaca file CSV secara langsung
 dingling_df = pd.read_csv("cleaned.csv")
