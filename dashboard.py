@@ -59,7 +59,7 @@ ax.grid(True)
 st.pyplot(fig)
 
 # Variasi Polusi Berdasarkan Jam
-t.subheader("3. Variasi Polusi Berdasarkan Jam dalam Sehari")
+st.subheader("3. Variasi Polusi Berdasarkan Jam dalam Sehari")
 hourly_avg = filtered_df.groupby("hour")[pollutants].mean()
 fig, ax = plt.subplots()
 sns.lineplot(data=hourly_avg, ax=ax)
