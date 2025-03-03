@@ -12,6 +12,20 @@ dingling_df = dingling_df.dropna(subset=["TEMP", "PRES", "RAIN"])
 
 st.title("Analisis Polusi Udara di Stasiun Dingling")
 
+# Sidebar untuk filter data
+st.sidebar.header("Filter Data")
+min_temp, max_temp = st.sidebar.slider("Pilih Rentang Suhu (TEMP)", 
+                                       int(dingling_df["TEMP"].min()), 
+                                       int(dingling_df["TEMP"].max()), 
+                                       (int(dingling_df["TEMP"].min()), int(dingling_df["TEMP"].max())))
+min_pres, max_pres = st.sidebar.slider("Pilih Rentang Tekanan Udara (PRES)", 
+                                       int(dingling_df["PRES"].min()), 
+                                       int(dingling_df["PRES"].max()), 
+                                       (int(dingling_df["PRES"].min()), int(dingling_df["PRES"].max())))
+
+dingling_df = dingling_df[(dingling_df["TEMP"] >= min_temp) & (dingling_df["TEMP"] <= max_temp) & 
+                           (dingling_df["PRES"] >= min_pres) & (dingling_df["PRES"] <= max_pres)]
+
 st.header("1. Hubungan Suhu & Tekanan dengan Polusi")
 
 fig, ax = plt.subplots()
